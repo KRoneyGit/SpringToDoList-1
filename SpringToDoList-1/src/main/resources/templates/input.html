@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert New Item</title>
+</head>
+<body>
+	<form th:object="${newItem}" th:action="@{/update/{id}(id=${newItem.id})}" method=POST>
+		Item Name: <input name="itemName" size="20" th:field="*{itemName}"><br />
+		Item Details: <textarea rows="3" cols="50" name="itemDetails" th:field="*{itemDetails}"></textarea><br />
+		Estimated Hours: <input name="estimatedHours" size="20" th:field="*{estimatedHours}"><br />
+		Created Date: <input type="date" name="createdDate" size="20" th:field="*{createdDate}"><br />
+		Due Date: <input type="date" name="dueDate" size="20" th:field="*{dueDate}"><br />
+		<input name="submit" type="submit" value="submit"/>
+	</form>
+	<a href="/">View To Do List</a>
+</body>
+</html>
