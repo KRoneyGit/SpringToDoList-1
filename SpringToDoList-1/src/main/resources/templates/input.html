@@ -3,10 +3,61 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert New Item</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script>
+	function pageSetup(){
+		const form = document.getElementById("form");
+		const itemName = document.getElementById("itemName");
+		const itemDetails = document.getElementById("itemDetails");
+		const estimatedHours = document.getElementById("estimatedHours");
+		const createdDate = document.getElementById("createdDate");
+		const dueDate = document.getElementById("dueDate");
+		const errorElement = document.getElementById("errorElement");
+
+		form.addEventListener('submit', logSubmit);
+	}
+	
+	function logSubmit(event){
+		let messages = [];
+		
+		if (itemName.value === '' || itemName.value == null){
+			messages.push('Item Name is required');
+		}
+		if (itemDetails.value === '' || itemDetails.value == null){
+			messages.push('Item Details is required');
+		}
+		if (isNaN(estimatedHours.value)){
+			messages.push('Estimated hours must be a number');
+		}
+		if (createdDate.value === '' || createdDate.value == null){
+			const today = new Date();
+			const yyyy = today.getFullYear();
+			let mm = today.getMonth() + 1; // Months start at 0!
+			let dd = today.getDate();
+
+			if (dd < 10) dd = '0' + dd;
+			if (mm < 10) mm = '0' + mm;
+
+			const formattedToday = yyyy + '-' + mm + '-' + dd;
+			
+			createdDate.value = formattedToday;
+			console.log(createdDate.value);
+		}
+		if (messages.length > 0){
+			errorElement.style.display = 'block';
+			errorElement.innerHTML = messages.join('<br>');
+			event.preventDefault();
+		}
+	}
+	
+</script>
 </head>
-<body>
-	<form th:object="${newItem}" th:action="@{/update/{id}(id=${newItem.id})}" method=POST>
-		Item Name: <input name="itemName" size="20" th:field="*{itemName}"><br />
+<body onLoad="pageSetup()">
+	<div id="errorElement" class="alert alert-danger" style="display:none"></div>
+	<form id="form" th:object="${newItem}" th:action="@{/update/{id}(id=${newItem.id})}" method=POST>
+		Item Name: <input id="itemName" name="itemName" size="20" th:field="*{itemName}"><br />
 		Item Details: <textarea rows="3" cols="50" name="itemDetails" th:field="*{itemDetails}"></textarea><br />
 		Estimated Hours: <input name="estimatedHours" size="20" th:field="*{estimatedHours}"><br />
 		Created Date: <input type="date" name="createdDate" size="20" th:field="*{createdDate}"><br />
